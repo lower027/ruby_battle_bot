@@ -1,0 +1,138 @@
+class Character
+    attr_accessor :name, :type, :health, :attack, :defense, :speed, :luck
+
+    def initialize(name, type, health, attack, defense, speed, luck)
+        @name = name
+        @type = type
+        @health = health
+        @attack = attack
+        @defense = defense
+        @speed = speed
+        @luck = luck
+    end
+
+    def to_s
+        "Name: #{@name}\nType: #{@type}\nHealth: #{@health}\nAttack: #{@attack}\nDefense: #{@defense}\nSpeed: #{@speed}\nLuck: #{@luck}"
+    end
+
+end 
+
+class Battle_arena
+    attr_accessor :character_1, :character_2
+
+    def initialize(character_1, character_2)
+        @character_1 = character_1
+        @character_2 = character_2
+    end
+
+    def critical_hit
+        critical_hit_chance = (Character.luck * rand)
+        if critical_hit_chance >= rand
+            Character.attack * 2
+        end
+    end
+
+    def character_1_turn
+        critical_hit_chance
+        damage_taken = character_1.attack - (character_2.defense * 0.50)
+        character_2.health -= damage_taken
+        puts "#{character_2.name} loses #{damage_taken} health!"
+    end
+
+    def character_2_turn
+        critical_hit
+        damage_taken = character_2.attack - (character_1.defense * 0.50)
+        character_1.health -= damage_taken
+        puts "#{character_1.name} loses #{damage_taken} health!"
+    end
+
+    def battle 
+        
+        while (character_1.health.positive? != false && character_2.heath.positive? != false)
+            puts "#{character_1.name} has #{character_1.health} HP left! \n #{character_2.name} has #{character_2.health} HP left! \n"
+            if (character_1.speed > character_2.speed)
+                character_1_turn
+                character_2_turn
+            elsif (character_2.speed > character_1.speed)
+                character_2_turn
+                character_1_turn
+            else 
+                x = rand(1..2)
+                if (x == 1)
+                    character_1_turn
+                    character_2_turn
+                elsif (x == 2)
+                    character_2_turn
+                    character_1_turn
+                end
+            end
+        end
+
+    end
+end
+
+puts "Enter stats for chracter 1!"
+puts "Enter name: "
+name = gets.chomp.upcase
+puts "Name: #{name}"
+
+puts "Enter type: "
+type = gets.chomp.upcase
+puts "Type: #{type}"
+
+puts "Enter health: "
+health = gets.chomp.to_i
+puts "Health: #{health}"
+
+puts "Enter attack:"
+attack = gets.chomp.to_i
+puts "Attack: #{attack}"
+
+puts "Enter defense: "
+defense = gets.chomp.to_i
+puts "Defense: #{defense}"
+
+puts "Enter speed: "
+speed = gets.chomp.to_i
+puts "Speed: #{speed}"
+
+puts "Enter luck: "
+luck = gets.chomp.to_i
+puts "Luck: #{luck}"
+
+
+character_1 = Character.new(name, type, health, attack, defense, speed, luck)
+
+puts "Enter stats for character 2!"
+print "Enter name: "
+name = gets.chomp.upcase
+puts "Name: #{name}"
+
+print "Enter type: "
+type = gets.chomp.upcase
+puts "Type: #{type}"
+
+print"Enter health: "
+health = gets.chomp.to_i
+puts "Health: #{health}"
+
+print "Enter attack:"
+attack = gets.chomp.to_i
+puts "Attack: #{attack}"
+
+print "Enter defense: "
+defense = gets.chomp.to_i
+puts "Defense: #{defense}"
+
+print "Enter speed: "
+speed = gets.chomp.to_i
+puts "Speed: #{speed}"
+
+print "Enter luck: "
+luck = gets.chomp.to_i
+puts "Luck: #{luck}"
+
+character_2 = Character.new(name, type, health, attack, defense, speed, luck)
+
+battle_log = Battle_arena.new(character_1, character_2)
+
