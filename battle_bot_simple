@@ -25,49 +25,84 @@ class Battle_arena
         @character_2 = character_2
     end
 
-    def critical_hit
-        critical_hit_chance = (Character.luck * rand)
-        if critical_hit_chance >= rand
-            Character.attack * 2
-        end
-    end
-
-    def character_1_turn
-        critical_hit_chance
-        damage_taken = character_1.attack - (character_2.defense * 0.50)
-        character_2.health -= damage_taken
-        puts "#{character_2.name} loses #{damage_taken} health!"
-    end
-
-    def character_2_turn
-        critical_hit
-        damage_taken = character_2.attack - (character_1.defense * 0.50)
-        character_1.health -= damage_taken
-        puts "#{character_1.name} loses #{damage_taken} health!"
-    end
-
     def battle 
         
-        while (character_1.health.positive? != false && character_2.heath.positive? != false)
+        while (character_1.health > 0 && character_2.health > 0 )
+
+            def character_1_critical_hit
+                critical_hit_chance = (character_1.luck * rand)
+                if critical_hit_chance >= rand
+                    character_1.attack * 2
+                end
+            end
+
+            def character_2_critical_hit
+                critical_hit_chance = (character_2.luck * rand)
+                if critical_hit_chance >= rand
+                    character_2.attack * 2
+                end
+            end
+
+            def character_1_turn
+                character_1_critical_hit
+                damage_taken = character_1.attack - (character_2.defense * 0.50)
+                character_2.health -= damage_taken
+                puts "#{character_2.name} loses #{damage_taken} health!"
+            end
+
+            def character_2_turn
+                character_2_critical_hit
+                damage_taken = character_2.attack - (character_1.defense * 0.50)
+                character_1.health -= damage_taken
+                puts "#{character_1.name} loses #{damage_taken} health!"
+            end
+
+            def character_1_healthcheck
+                if character_1.health <= 0
+                    puts "#{character_1.name} cannot battle! #{character_2.name} wins!"
+                    break
+                end
+            end
+
+            def character_2_healthcheck
+                if character_2.health <= 0
+                    puts "#{character_1.name} cannot battle! #{character_2.name} wins!"
+                    break
+                end
+            end
+
+
             puts "#{character_1.name} has #{character_1.health} HP left! \n #{character_2.name} has #{character_2.health} HP left! \n"
             if (character_1.speed > character_2.speed)
                 character_1_turn
+                character_2_healthcheck
                 character_2_turn
+                character_1_healthcheck
+                
             elsif (character_2.speed > character_1.speed)
                 character_2_turn
+                character_1_healthcheck
                 character_1_turn
+                character_2_healthcheck
             else 
                 x = rand(1..2)
                 if (x == 1)
                     character_1_turn
+                    character_2_healthcheck
                     character_2_turn
+                    character_1_healthcheck
+                    
                 elsif (x == 2)
                     character_2_turn
+                    character_1_healthcheck
                     character_1_turn
+                    character_2_healthcheck
                 end
             end
-        end
 
+
+        end
+        
     end
 end
 
@@ -136,3 +171,4 @@ character_2 = Character.new(name, type, health, attack, defense, speed, luck)
 
 battle_log = Battle_arena.new(character_1, character_2)
 
+battle_log.battle
