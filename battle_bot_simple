@@ -12,6 +12,8 @@ class Character
     end
 end
 
+
+
 class Battle_arena
     attr_accessor :character_1, :character_2
 
@@ -20,31 +22,24 @@ class Battle_arena
         @character_2 = character_2
     end
 
-    def character_1_critical_hit
-        @critical_hit_chance = (character_1.luck * rand)
-        if @critical_hit_chance >= rand
-            character_1.attack * 2
+    def attack_multiplier(character)
+        multiplier = 1
+        if [0.5, 0.05 * (character.luck + 1)].min >= rand
+          multiplier += 1
+          puts "#{character.name} lands a critical hit!"
         end
-    end
-
-    def character_2_critical_hit
-        @critical_hit_chance = (character_2.luck * rand)
-        if @critical_hit_chance >= rand
-            character_2.attack * 2
-        end
+        multiplier
     end
 
     def character_1_turn
-        character_1_critical_hit
-        damage_taken = character_1.attack - (character_2.defense * 0.50)
-        character_2.health -= damage_taken
+        damage_taken = (character_1.attack * attack_multiplier(character_1)) - (character_2.defense * 0.15)
+        character_2.health -= damage_taken.to_i
         puts "#{character_2.name} loses #{damage_taken} health!"
     end
 
     def character_2_turn
-        character_2_critical_hit
-        damage_taken = character_2.attack - (character_1.defense * 0.50)
-        character_1.health -= damage_taken
+        damage_taken = (character_2.attack * attack_multiplier(character_2)) - (character_1.defense * 0.15)
+        character_1.health -= damage_taken.to_i
         puts "#{character_1.name} loses #{damage_taken} health!"
     end
 
@@ -52,15 +47,17 @@ class Battle_arena
         
         while (character_1.health > 0 && character_2.health > 0 )
 
-            puts "#{character_1.name} has #{character_1.health} HP left! \n #{character_2.name} has #{character_2.health} HP left! \n"
+            puts "#{character_1.name} has #{character_1.health} HP left! #{character_2.name} has #{character_2.health} HP left! \n"
             if (character_1.speed > character_2.speed)
                 character_1_turn
                 if character_2.health <= 0
+                    puts "#{character_1.name} has #{character_1.health} HP left! #{character_2.name} has 0 HP left! \n"
                     puts "#{character_2.name} cannot battle anymore! #{character_1.name} wins!"
                     break
                 end
                 character_2_turn
                 if character_1.health <= 0
+                    puts "#{character_1.name} has 0 HP left! #{character_2.name} has #{character_2.health} HP left! \n"
                     puts "#{character_1.name} cannot battle anymore! #{character_2.name} wins!"
                     break
                 end
@@ -68,11 +65,13 @@ class Battle_arena
             elsif (character_2.speed > character_1.speed)
                 character_2_turn
                 if character_1.health <= 0
+                    puts "#{character_1.name} has 0 HP left! #{character_2.name} has #{character_2.health} HP left! \n"
                     puts "#{character_1.name} cannot battle anymore! #{character_2.name} wins!"
                     break
                 end
                 character_1_turn
                 if character_2.health <= 0
+                    puts "#{character_1.name} has #{character_1.health} HP left! #{character_2.name} has 0 HP left! \n"
                     puts "#{character_2.name} cannot battle anymore! #{character_1.name} wins!"
                     break
                 end
@@ -82,11 +81,13 @@ class Battle_arena
                 if (x == 1)
                     character_1_turn
                     if character_2.health <= 0
+                        puts "#{character_1.name} has #{character_1.health} HP left! #{character_2.name} has 0 HP left! \n"
                         puts "#{character_2.name} cannot battle anymore! #{character_1.name} wins!"
                         break
                     end
                     character_2_turn
                     if character_1.health <= 0
+                        puts "#{character_1.name} has 0HP left! #{character_2.name} has #{character_2.health} HP left! \n"
                         puts "#{character_1.name} cannot battle anymore! #{character_2.name} wins!"
                         break
                     end
@@ -94,11 +95,13 @@ class Battle_arena
                 elsif (x == 2)
                     character_2_turn
                     if character_1.health <= 0
+                        puts "#{character_1.name} has 0 HP left! \n #{character_2.name} has #{character_2.health} HP left! \n"
                         puts "#{character_1.name} cannot battle anymore! #{character_2.name} wins!"
                         break
                     end
                     character_1_turn
                     if character_2.health <= 0
+                        puts "#{character_1.name} has #{character_1.health} HP left! \n #{character_2.name} has 0 HP left! \n"
                         puts "#{character_2.name} cannot battle anymore! #{character_1.name} wins!"
                         break
                     end
@@ -109,68 +112,75 @@ class Battle_arena
     end
 end
 
+#type matchups
+
+
+MATCHUPS = {
+    fire: {fire: 1.0, earth: 2.0, ice: -0.5, dark: -0.5},
+    light: {light: 1.0, dark: 2.0, ice: 2.0},
+    dark: {dark: 1.0, light: 2.0, fire: 2.0},
+    wind: {wind: 1.0, steel: 2.0, ice: 2.0, earth: -0.5, fire: -0.5},
+    ice: {ice: 1.0, fire: 2.0, steel: 2.0, light: -0.5, wind: -0.5},
+    earth: {earth: 1.0, ice: 2.0, wind: 2.0, steel: -0.5, fire: -0.5},
+    steel: {steel: 1.0, fire: 2.0, earth: 2.0, wind: -0.5, ice: -0.5}
+}
+
+
+#inputting stats for character 1
 puts "Enter stats for chracter 1!"
 puts "Enter name: "
-name = gets.chomp.upcase
-puts "Name: #{name}"
+name = gets.chomp.downcase
 
 puts "Enter type: "
-type = gets.chomp.upcase
-puts "Type: #{type}"
+type = gets.chomp.downcase.to_sym
 
 puts "Enter health: "
 health = gets.chomp.to_i
-puts "Health: #{health}"
 
 puts "Enter attack:"
 attack = gets.chomp.to_i
-puts "Attack: #{attack}"
 
 puts "Enter defense: "
 defense = gets.chomp.to_i
-puts "Defense: #{defense}"
 
 puts "Enter speed: "
 speed = gets.chomp.to_i
-puts "Speed: #{speed}"
 
 puts "Enter luck: "
 luck = gets.chomp.to_i
-puts "Luck: #{luck}"
 
+puts "Name: #{name}, Type: #{type}, Health: #{health}, Attack: #{attack}, Defense: #{defense}, Speed: #{speed}, Luck: #{luck}"
 
 character_1 = Character.new(name, type, health, attack, defense, speed, luck)
 
+#entering stats for character 2
+
 puts "Enter stats for character 2!"
 print "Enter name: "
-name = gets.chomp.upcase
-puts "Name: #{name}"
+name = gets.chomp.downcase
 
 print "Enter type: "
-type = gets.chomp.upcase
-puts "Type: #{type}"
+type = gets.chomp.downcase.to_sym
 
 print"Enter health: "
 health = gets.chomp.to_i
-puts "Health: #{health}"
 
-print "Enter attack:"
+print "Enter attack: "
 attack = gets.chomp.to_i
-puts "Attack: #{attack}"
 
 print "Enter defense: "
 defense = gets.chomp.to_i
-puts "Defense: #{defense}"
 
 print "Enter speed: "
 speed = gets.chomp.to_i
-puts "Speed: #{speed}"
 
 print "Enter luck: "
 luck = gets.chomp.to_i
-puts "Luck: #{luck}"
+
+puts "Name: #{name}, Type: #{type}, Health: #{health}, Attack: #{attack}, Defense: #{defense}, Speed: #{speed}, Luck: #{luck}"
 
 character_2 = Character.new(name, type, health, attack, defense, speed, luck)
+
 
 battle_log = Battle_arena.new(character_1, character_2)
 
