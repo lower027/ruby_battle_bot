@@ -8,7 +8,7 @@ character_csv = 'C:\Users\Brittany\Documents\ruby_scripts\wishwing_battlebot\cha
 class Character
   attr_accessor :name, :type, :health, :attack, :defense, :speed, :luck
 
-  def initialize(name:, type:, health:, attack:, defense:, speed:, luck:)
+  def initialize(name, type, health, attack, defense, speed, luck)
       @name = name
       @type = type
       @health = health
