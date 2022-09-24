@@ -1,6 +1,6 @@
 require 'csv'
 
-character_csv = 'C:\Users\Brittany\Documents\ruby_scripts\wishwing_battlebot\character_datasheet.csv'
+character_csv = 'file location'
 
 #type matchups
 
