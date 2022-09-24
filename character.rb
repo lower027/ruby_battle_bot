@@ -22,10 +22,13 @@ end
 def character_map(filename)
   @character_hash = {}
   CSV.foreach(filename, headers: true, col_sep: ',') do |row|
-    character = Character.new(name: row['NAME'], type: row['TYPE'], health: row['HEALTH'], attack: row['ATTACK'], defense: row['DEFENSE'], speed: row['SPEED'], luck: row['LUCK'])
+    character_data = row.to_h
+    character = Character.new(
+      character_data['NAME'], character_data['TYPE'],
+      character_data['HEALTH'], character_data['ATTACK'], character_data['DEFENSE'],
+      character_data['SPEED'], character_data['LUCK']
+    )
     @character_hash[character.name] = character
-    puts row['NAME'].class
-    puts row['TYPE'].class
   end
   @character_hash
 end
