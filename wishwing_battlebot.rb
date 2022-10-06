@@ -146,14 +146,12 @@ p character_map(character_csv)
 puts "Enter Character 1's name"
 character_1 = @character_hash[gets.chomp.gsub(" ", "_").upcase]
 
-#puts "Name: #{name}, Type: #{type}, Health: #{health}, Attack: #{attack}, Defense: #{defense}, Speed: #{speed}, Luck: #{luck}"
+
 
 #entering stats for character 2
 
 puts "Enter Character 2's name"
 character_2 = @character_hash[gets.chomp.gsub(" ", "_").upcase]
-#puts "Name: #{name}, Type: #{type}, Health: #{health}, Attack: #{attack}, Defense: #{defense}, Speed: #{speed}, Luck: #{luck}"
-
 
 battle_log = Battle_arena.new(character_1, character_2)
 
