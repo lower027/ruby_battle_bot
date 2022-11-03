@@ -1,6 +1,6 @@
 require 'csv'
 
-character_csv = 'file location'
+
 
 #type matchups
 
@@ -80,6 +80,7 @@ class Battle_arena
   def character_defeated(attacker, defender)
     puts "#{attacker.name} has #{attacker.health} HP left! #{defender.name} has 0 HP left!"
     puts "#{defender.name} cannot battle anymore! #{attacker.name} wins!"
+    
   end
 
 
@@ -146,7 +147,7 @@ p character_map(character_csv)
 puts "Enter Character 1's name"
 character_1 = @character_hash[gets.chomp.gsub(" ", "_").upcase]
 
-=
+
 
 #entering stats for character 2
 
