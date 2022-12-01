@@ -1,3 +1,11 @@
+require "discorb"
+require "csv"
+
+
+
+
+character_csv = 'C:\Users\Brittany\Documents\ruby_scripts\wishwing_battlebot\character_datasheet.csv'
+
 #type matchups
 
 
@@ -167,3 +175,6 @@ client.slash("battle", "Battle", {
   interaction.post(queue.join("\n"), ephemeral: false)
 
 end
+
+
+client.run('TOKEN')
